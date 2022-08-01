@@ -28,9 +28,9 @@ import yaml
 from kubernetes_asyncio.client import ApiClient, Configuration
 
 from .config_exception import ConfigException
+from .dateutil import UTC, parse_rfc3339
 from .exec_provider import ExecProvider
 from .google_auth import google_auth_credentials
-from .dateutil import UTC, parse_rfc3339
 from .openid import OpenIDRequestor
 
 EXPIRY_SKEW_PREVENTION_DELAY = datetime.timedelta(minutes=5)
@@ -236,10 +236,8 @@ class KubeConfigLoader(object):
                     credentials = self._get_google_credentials()
             else:
                 credentials = await google_auth_credentials(config)
-
             config.value['access-token'] = credentials.token
             config.value['expiry'] = credentials.expiry
-
             if self._config_persister:
                 self._config_persister(self._config.value)
 

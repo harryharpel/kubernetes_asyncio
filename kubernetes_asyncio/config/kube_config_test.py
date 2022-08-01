@@ -19,9 +19,8 @@ import shutil
 import tempfile
 from types import SimpleNamespace
 
-import mock
 import yaml
-from asynctest import Mock, TestCase, main, patch
+from asynctest import mock, TestCase, main, patch
 from six import PY3
 
 from kubernetes_asyncio.client.configuration import Configuration
@@ -1053,7 +1052,7 @@ class TestKubeConfigLoader(BaseTestCase):
         mock_sleep = patch('asyncio.sleep').start()
         mock_sleep.side_effect = [0, AssertionError]
 
-        mock_config = Mock()
+        mock_config = mock.Mock()
         mock_config.api_key = {}
 
         with self.assertRaises(AssertionError):
@@ -1083,8 +1082,7 @@ class TestKubernetesClientConfiguration(BaseTestCase):
 
         def refresh_api_key_hook(client_config):
             self.assertEqual(client_config, config)
-            client_config.api_key[identifier] = expected_token
-            
+            client_config.api_key[identifier] = expected_token    
         config.refresh_api_key_hook = refresh_api_key_hook
 
         self.assertEqual('Bearer ' + expected_token,
